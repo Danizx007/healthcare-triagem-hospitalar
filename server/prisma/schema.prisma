@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Risk {
+  EMERGENCIA
+  MUITO_URGENTE
+  URGENTE
+  POUCO_URGENTE
+  NAO_URGENTE
+}
+
+enum Status {
+  AGUARDANDO
+  EM_ATENDIMENTO
+  CONCLUIDO
+}
+
+model Patient {
+  id        String   @id @default(cuid())
+  name      String
+  cpf       String   @unique
+  birthDate DateTime
+  sex       String
+  phone     String
+  address   String
+  createdAt DateTime @default(now())
+  triages   Triage[]
+}
+
+model Triage {
+  id           String    @id @default(cuid())
+  patientId    String
+  patient      Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  symptoms     String
+  observations String
+  risk         Risk
+  createdAt    DateTime  @default(now())
+  encounter    Encounter?
+}
+
+model Encounter {
+  id        String   @id @default(cuid())
+  triageId  String   @unique
+  triage    Triage   @relation(fields: [triageId], references: [id], onDelete: Cascade)
+  status    Status   @default(AGUARDANDO)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

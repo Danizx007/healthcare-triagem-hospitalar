@@ -1,0 +1,17 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+server/prisma/*.db
+server/prisma/*.db-journal
+*.log
+.DS_Store
+
+# Local databases and generated TypeScript build metadata
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.tsbuildinfo
